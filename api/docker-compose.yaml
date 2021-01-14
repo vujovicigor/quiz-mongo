@@ -1,0 +1,31 @@
+version: '3.3'
+services:
+  database:
+    image: postgres:13-alpine
+    volumes:
+    - ./initdb:/docker-entrypoint-initdb.d
+    ports:
+    - "5433:5432"    
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=thequiz_password
+      
+  rest:
+    image: node:12.13.0-alpine3.10
+    volumes:
+    - ./:/usr/src/app
+    ports:
+    - "3001:3001"
+    depends_on:
+    - "database"
+    restart: always
+    command: sh -c "npm install && npm run start"
+    working_dir: /usr/src/app
+    environment:
+      - NODE_ENV=production
+      - PGHOST=database
+      - PGUSER=postgres
+      - PGDATABASE=postgres
+      - PGPASSWORD=thequiz_password
+      - PGPORT=5432
+      - PORT=3001
