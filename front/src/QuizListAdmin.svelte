@@ -2,7 +2,7 @@
   import Table from '@/Table.svelte'
   import QuizDetailAdmin from '@/QuizDetailAdmin.svelte'
   import Toast from '@/utils/toast.js'
-  import { list, refresh } from '@/store/QuizStore.js'
+  import { list, refresh, update } from '@/store/QuizStore.js'
   refresh()
   let showModal = false
   const toast = new Toast()    
@@ -16,7 +16,6 @@
   function showQuestions(row){
     selectedRow = {...row}
     let quiz_id = row._id
-    console.log('quiz_id', quiz_id)
     if (expanded_quiz_id == quiz_id)
       expanded_quiz_id = null
     else 
@@ -27,7 +26,7 @@
 
   function addNewBlankQuestion(ix){
     list.update(d=>{
-      d[ix].questions.push( {answers:[], correctAnswerIndex:0, title:''} )
+      d[ix].questions.push( {answers:[], correctAnswerIndex:-1, title:''} )
       return d
     })
   }
@@ -53,11 +52,17 @@
     })
   }
   
+  async function saveOneQuiz(row){
+    let [response, error] =  await update(row)
+    if (error) return
+    toast.success('Quiz saved')
+    refresh()
+  }
 </script>
 
-<h1 class="p-2 text-center">My Quizes
+<h1 class="p-2 text-center">My Quizzes
 	<div style="display:flex; align-items: center;justify-content: flex-end;">
-    <button on:click={addNew} id="addUser" class="btn btn-primary" style="white-space: nowrap">Add New Quiz</button>
+    <button on:click={addNew} id="addUser" class="btn btn-link" style="white-space: nowrap">Add New Quiz</button>
 	</div>
 </h1> 
 <div style="display:flex; flex-flow:column;overflow: auto;flex: 1;">
@@ -67,8 +72,11 @@
       {#each $list as row, ix}
         <li class="list-group-item d-flex justify-content-between align-items-center" 
         on:click={()=>showQuestions(row)} class:active={selectedRow?._id == row._id}>
-          {row.quizTitle}
-          <button on:click|stopPropagation={()=>{ selectedRow = {...row}; showModal=true}}  class="btn btn-secondary" style="white-space: nowrap">Edit Quiz title</button>
+          {row.quizTitle} 
+          <div>
+            <span class="badge badge-primary">{row.questions?.length} qestions</span>
+            <button on:click|stopPropagation={()=>{ selectedRow = {...row}; showModal=true}}  class="btn btn-secondary" style="white-space: nowrap">Edit</button>
+          </div>            
         </li>
 
         {#if expanded_quiz_id == row._id}
@@ -117,7 +125,7 @@
                   </li>
                   {/each}
                   <li class="list-group-item py-0" style="border-bottom-width:0">
-                    <button on:click={()=>addNewBlankAnswer(ix,qix)} class="btn btn-link" >+ Add new answer</button>
+                    <button on:click={()=>addNewBlankAnswer(ix,qix)} class="btn btn-link" >+ Add answer</button>
                   </li>
                 </ul>
               </li>
@@ -125,8 +133,9 @@
 
               {/each}
 
-              <li class="list-group-item py-0" style="border-bottom-width:0">
-                <button on:click={()=>addNewBlankQuestion(ix)} class="btn btn-link" >+ Add new Question</button>
+              <li class="list-group-item py-0 footer" style="border-bottom-width:0">
+                <button on:click={()=>addNewBlankQuestion(ix)} class="btn btn-link" >+ Add Question</button>
+                <button on:click={()=>saveOneQuiz(row)} class="btn btn-primary float-right" >Save</button>
               </li>
 
 
@@ -143,11 +152,16 @@
 </div>
 
 {#if showModal}
-  <QuizDetailAdmin bind:show={showModal} bind:selectedRow></QuizDetailAdmin>
+  <QuizDetailAdmin bind:show={showModal} bind:selectedRow bind:expanded_quiz_id ></QuizDetailAdmin>
 {/if}
 
 <style>
 .list-group-item{
   padding: 0.5rem 1.25rem;
+}
+.footer{
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
 }
 </style>

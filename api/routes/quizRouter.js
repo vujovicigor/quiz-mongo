@@ -9,6 +9,11 @@ router.route('/quiz-admin')
 .delete( groupReqVars, catchAsyncError(QuizController.my_quiz_delete))
 .patch ( groupReqVars, catchAsyncError(QuizController.my_quiz_update))
 
+router.route('/take-a-quiz')
+.get   ( groupReqVars, catchAsyncError(QuizController.take_a_quiz_list))
+.post  ( groupReqVars, catchAsyncError(QuizController.take_a_quiz_submit))
+
+
 //.get('/quiz_list', groupReqVars, catchAsyncError(QuizController.quiz_list))
 //.get('/quiz_insert', groupReqVars, catchAsyncError(QuizController.quiz_list))
   

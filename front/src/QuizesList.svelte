@@ -1,16 +1,16 @@
 
 <script>
   import Table from '@/Table.svelte'
-  import User from '@/User.svelte'
+  import TakeAQuizSingle from '@/TakeAQuizSingle.svelte'
   import Toast from '@/utils/toast.js'
-  import { list, refresh }from '@/store/quizStore.js'
+  import { list, refresh }from '@/store/takeAQuizStore.js'
   refresh()
   let showModal = false
   const toast = new Toast()    
   export let selectedRow = {}
 </script>
 
-<h1 class="p-2 text-center">All Quizes
+<h1 class="p-2 text-center">Pick a quiz 
 </h1>  
 <div style="display:flex; flex-flow:column;overflow: auto;flex: 1;">
   <div class="table-parent">
@@ -26,9 +26,11 @@
       {#each $list as row, ix}
         <tr on:click={()=>{ selectedRow = {...row}; showModal=true}} >
           <td>{ix+1}.</td>
-          <td>{row.title}</td>
+          <td>{row.quizTitle}</td>
           <td>{row.createdBy?.name_first} {row.createdBy?.name_last}</td>
-          <td>-</td>
+          <td>
+            <span class="badge badge-primary">{row.questions?.length} question{row.questions?.length>1?'s':''}</span>
+          </td>
         </tr>
       {:else}
       <tr>
@@ -40,7 +42,7 @@
 </div>
 
 {#if showModal}
-  <User bind:show={showModal} bind:selectedRow></User>
+  <TakeAQuizSingle bind:show={showModal} bind:selectedRow></TakeAQuizSingle>
 {/if}
 
 <style>

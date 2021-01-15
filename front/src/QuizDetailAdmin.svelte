@@ -8,6 +8,7 @@
   let busy = false
   export let show
   export let selectedRow = {}
+  export let expanded_quiz_id
   let clonedSelectedRow = { ...selectedRow }
   $: disabled = shallowEqual(clonedSelectedRow, selectedRow)
   
@@ -15,6 +16,10 @@
     let [response, error] =  selectedRow._id ? await update(selectedRow) : await insert(selectedRow)
     if (error) return
     toast.success('Quiz saved')
+    if (response.results._id) {
+      selectedRow = response.results
+      expanded_quiz_id = response.results._id
+    }
     refresh()
     show = false
   }
@@ -39,7 +44,7 @@
   <form>
     <div class="form-group">
       <label style="display:block">Quiz title
-        <input type="text" class="form-control" bind:value={selectedRow.title} >
+        <input type="text" class="form-control" bind:value={selectedRow.quizTitle} >
       </label>
     </div>
 
@@ -49,7 +54,7 @@
   <h2 slot='footer' class="d-flex justify-content-between px-3">
     <div>
       <button class="btn" on:click={()=>{ show=false }}>Cancel</button>
-      <button disabled={!selectedRow._id || $status.loading} class="btn btn-warning" on:click={removeQuiz}>Delete</button>
+      <button disabled={!selectedRow._id || $status.loading} class="btn btn-warning" on:click={removeQuiz}>Delete quiz</button>
     </div>
     <button disabled={disabled || $status.loading} on:click={save} class="btn btn-primary">Save</button>
   </h2>    

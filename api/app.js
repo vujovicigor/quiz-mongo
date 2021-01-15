@@ -49,6 +49,7 @@ module.exports = app;
 mongoose.connect(process.env.MONGOCONN, {useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true})
 .then(() => {
   console.log('mongo connected');
+  mongoose.set('useFindAndModify', false)
   server.listen(port);
 }, error => {
   console.log('mongo error', error);
