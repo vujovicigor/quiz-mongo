@@ -20,6 +20,7 @@
     }
     toast.success('Welcome'); 
     $session = { ...resp.results, isLogedIn:true, token:resp.token }
+    document.location.hash='#page=allquizes'
   }
 
 	function handleKeydown(event) {

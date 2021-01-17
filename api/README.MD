@@ -1,31 +1,19 @@
-## thequiz-api
-### Author: Igor Vujovic
+# Nodejs/expressjs/mongo backend project for the quiz coding challenge.
 
-This is api for the quiz Coding Challenge.
+## Demo
 
-Demo of the app that consumes this api is publicly available on: [thequiz.cf](https://thequiz.cf)
+Visit [quiz.fly.dev/](https://quiz.fly.dev/)
 
-Demo app source is available on the private github: https://github.com/vujovicigor/thequiz-api
+## Get started
 
-#### Spin up the backend locally with docker-compose 
-This command will download required dependencies, bootstrap node api and initialize db. 
-API will be exposed on port 3001 and db on port 5432.
+Install the dependencies
 
-Configuration can be found in docker-compose.yaml located in the root of this repo.
-Start docker containers
-```sh
-docker-compose up -d
+```bash
+npm install
 ```
 
-Stop all containers
-```sh
-docker-compose stop
-```
+Run nodejs
 
-Stop and destroy all containers
-```sh
-docker-compose down -v
+```bash
+node app.js
 ```
-
-TODO: 
-try catch provjeri

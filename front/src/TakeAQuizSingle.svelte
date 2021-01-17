@@ -24,8 +24,8 @@
     if (error) return
     scoreObj = response.results
     step = 2
-    //toast.success('Record saved')
-    //refresh()
+    toast.success('Your score is ' + (( scoreObj.correctAnswersCount || 0 ) / (scoreObj.questionsCount || 1) * 100).toFixed(2) + '%')
+    refresh()
     //show = false
   }
 

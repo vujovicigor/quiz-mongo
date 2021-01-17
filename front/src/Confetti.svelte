@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
 
-	let characters = ['🥳', '🎉', '✨'];
+	let characters = ['🥳', '🎉', '✨', '🏅', '🥇', '🌟'];
 
 	let confetti = new Array(40).fill()
 		.map((_, i) => {

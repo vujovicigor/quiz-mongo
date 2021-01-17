@@ -106,6 +106,7 @@ USAGE:
     }
 
     if (event.key === 'Tab') {
+      if (!modalsStack || !modalsStack[modalsStack.length-1] ) return
       // trap focus
       const nodes = modalsStack[modalsStack.length-1].nodes.querySelectorAll('*');
       //console.log('tab', nodes)

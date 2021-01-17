@@ -1,5 +1,7 @@
 const Quiz = require('../models/quizModel.js');
+const User = require('../models/userModel.js');
 const Scores = require('../models/scoresModel.js')
+const ScoresGroupByUserViewModel = require('../models/scoresGroupByUserViewModel.js')
 
 module.exports.my_quiz_list = async (req, res) => {  
   const quiz = await Quiz.find({ createdBy:req.user._id }).populate('createdBy')
@@ -45,13 +47,39 @@ module.exports.my_quiz_update = async (req, res) => {
 };
       
 module.exports.take_a_quiz_list = async (req, res) => {  
+  /*
   const quiz = await Quiz.find({
     'questions.0': {$exists: true},
     'questions.answers.0': {$exists: true}
   }).select('-questions.correctAnswerIndex').populate('createdBy')
+*/
+  const quiz = await Quiz.aggregate([
+    { 
+      $match: {
+      'questions.0': {$exists: true},
+      'questions.answers.0': {$exists: true}
+      }
+    },
+    
+    {
+      $lookup: {
+          from: "scoresGroupByQuizView",
+          localField: "_id",    // field in the orders collection
+          foreignField: "_id",  // field in the items collection
+          as: "fromItems"
+      }
+    },
+    {
+      $replaceRoot: { newRoot: { $mergeObjects: [ { $arrayElemAt: [ "$fromItems", 0 ] }, "$$ROOT" ] } }
+    },
+    { $project: { fromItems: 0, 'questions.correctAnswerIndex':0 } }
+  ])
+  // https://stackoverflow.com/questions/16680015/how-to-use-populate-and-aggregate-in-same-statement
+  const populatedQuiz = await User.populate(quiz, {path: "createdBy", model: 'User'})
+
   return res.status(200).send({
     message: 'Ok',
-    results: quiz,
+    results: populatedQuiz,
   });
 };
       
@@ -81,5 +109,14 @@ module.exports.take_a_quiz_submit = async (req, res) => {
   return res.status(200).send({
     message: 'Ok',
     results: originalQuiz,
+  });
+};
+
+
+module.exports.high_scores_user_list = async (req, res) => { 
+  const quiz = await ScoresGroupByUserViewModel.find().populate('_id').sort({ 'totalCorrectAnswersCount' : 'desc'})
+  return res.status(200).send({
+    message: 'Ok',
+    results: quiz,
   });
 };

@@ -2,14 +2,14 @@
   import QuizesList from '@/QuizesList.svelte'
   import QuizListAdmin from '@/QuizListAdmin.svelte'
   
-  import Users_list from '@/Users_list.svelte'
+  import HighScores from '@/HighScores.svelte'
 //  import Validator from 'jsonschema'
   import Login from '@/Login.svelte'
   import Register from '@/Register.svelte'
   import { session } from '@/store/loginStore.js'
   import { Match, Matcher } from 'svelte-store-router'
   import { route } from '@/store/routeStore.js'  
-  import Landing from '@/Landing.svelte'
+
 /*
   function setPath(name){
     $route.path = name
@@ -29,7 +29,8 @@
 {#if $session.isLogedIn }
   <header>
     <nav class="navbar navbar-expand">
-      <a class="navbar-brand" href="#page=home">thequiz</a>
+    <!--
+      <a class="navbar-brand" href="#page=home">thequiz</a> -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -37,17 +38,17 @@
 
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active" class:active={$route.fragment.page=='allquizes'}>
-            <a class="nav-link" href="#page=allquizes">All Quizes
+            <a class="nav-link" href="#page=allquizes">Take a Quiz
               <span class="sr-only">(current)</span>
             </a>
           </li>
           <li class="nav-item active" class:active={$route.fragment.page=='quizlistadmin'}>
-            <a class="nav-link" href="#page=quizlistadmin">Quiz Administration
+            <a class="nav-link" href="#page=quizlistadmin">My Quizzes
               <span class="sr-only">(current)</span>
             </a>
           </li>
-          <li class="nav-item active" class:active={$route.fragment.page=='users'}>
-            <a class="nav-link" href="#page=users">Users 
+          <li class="nav-item active" class:active={$route.fragment.page=='highscores'}>
+            <a class="nav-link" href="#page=highscores">High Scores 
               <span class="sr-only">(current)</span>
             </a>
           </li>
@@ -72,11 +73,11 @@
         <QuizListAdmin></QuizListAdmin>
       </Match>
       
-      <Match path={$route.fragment.page} pattern="users">
-        <Users_list></Users_list>
+      <Match path={$route.fragment.page} pattern="highscores">
+        <HighScores></HighScores>
       </Match>
       <Match path={$route.fragment.page} >
-        <Landing></Landing>
+        <QuizesList></QuizesList>
       </Match>
     </Matcher>
   </div>

@@ -47,7 +47,7 @@ var server = require('http').Server(app);
 module.exports = app;
 
 mongoose.connect(process.env.MONGOCONN, {useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true})
-.then(() => {
+.then((db) => {
   console.log('mongo connected');
   mongoose.set('useFindAndModify', false)
   server.listen(port);

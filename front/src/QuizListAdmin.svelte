@@ -2,13 +2,13 @@
   import Table from '@/Table.svelte'
   import QuizDetailAdmin from '@/QuizDetailAdmin.svelte'
   import Toast from '@/utils/toast.js'
-  import { list, refresh, update } from '@/store/QuizStore.js'
+  import { list, refresh, update , status} from '@/store/QuizStore.js'
   refresh()
   let showModal = false
   const toast = new Toast()    
   export let selectedRow = {}
   function addNew(){
-    selectedRow = { title:'' }
+    selectedRow = { quizTitle:'' }
     showModal=true
   }
 
@@ -144,7 +144,15 @@
         {/if}
       {:else}
         <li class="list-group-item" >
-          <center><i>Empty list, why don't you add a quiz on the button above &nearr;</i></center>
+          {#if $status.loading}
+            <center>
+              <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </center>
+          {:else}
+            <center><i>Empty list, why don't you add a quiz on the button above &nearr;</i></center>
+          {/if}
         </li>
       {/each}
     </ul>

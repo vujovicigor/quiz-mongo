@@ -13,6 +13,7 @@ router.route('/take-a-quiz')
 .get   ( groupReqVars, catchAsyncError(QuizController.take_a_quiz_list))
 .post  ( groupReqVars, catchAsyncError(QuizController.take_a_quiz_submit))
 
+router.get('/high-score', catchAsyncError(QuizController.high_scores_user_list))
 
 //.get('/quiz_list', groupReqVars, catchAsyncError(QuizController.quiz_list))
 //.get('/quiz_insert', groupReqVars, catchAsyncError(QuizController.quiz_list))
