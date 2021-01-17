@@ -6,10 +6,10 @@ Visit [quiz.fly.dev/](https://quiz.fly.dev/)
 
 ## Frontend readme
 
-Visit [frontend/](frontend/)
+Visit [frontend/](https://github.com/vujovicigor/quiz-mongo/tree/main/front/)
 
 
 ## Backend readme
 
-Visit [api/](api/)
+Visit [api/](https://github.com/vujovicigor/quiz-mongo/tree/main/api/)
 
